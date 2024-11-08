@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>QualityDU Login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <style>
+    .login-container {
+      display: table-cell;
+      vertical-align: middle;
+      height: 15vh;
+      width: 100vw;
+      border: 1px solid red;
+
+      position: absolute;
+      top: 45vh;
+      left: 0%;
+    }
+
+    .credentials-container {
+      padding: 1vw;
+      background-color: green;
+    }
+
+    .form-btn {
+      padding: 0.5vw;
+    }
+
+    .buttons-container {
+      background-color: blue;
+    }
+
+    .username-container {
+      background-color: red;
+    }
+
+    .password-container {
+      background-color: magenta;
+    }
+  </style>
+
+  <div class='login-container'>
+    <div class='credentials-container'>
+      <div class='username-container'>
+        <label for='name'>Username:</label>
+        <input name='username' type='text' placeholder='Username' />
+      </div>
+      <div class='password-container'>
+        <label for='password'>Password :</label>
+        <input name='password' type='password' placeholder='Password' />
+      </div>
+    </div>
+    <div class='buttons-container'>
+      <input type='submit' value='Login' class='form-btn' onclick="login()"/>
+      <a href="signup.html">
+        <button class='form-btn'>Sign up instead</button>
+      </a>
+
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      // TODO: send credentials to server
+      // TODO: save sesskey to cookie
+      window.location.href = 'logged-common.html?c=chat';
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>QualityDU SignUp</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <style>
+    .signup-container {
+      display: table-cell;
+      vertical-align: middle;
+      height: 15vh;
+      width: 100vw;
+      border: 1px solid red;
+
+      position: absolute;
+      top: 45vh;
+      left: 0%;
+    }
+
+    .credentials-container {
+      padding: 1vw;
+      background-color: green;
+    }
+
+    .form-btn {
+      padding: 0.5vw;
+    }
+
+    .buttons-container {
+      background-color: blue;
+    }
+
+    .username-container {
+      background-color: red;
+    }
+
+    .password-container {
+      background-color: magenta;
+    }
+
+    .email-container {
+      background-color: orange;
+    }
+  </style>
+
+  <div class='signup-container'>
+    <div class='credentials-container'>
+      <div class='username-container'>
+        <label for='name'>Username:</label>
+        <input name='username' type='text' placeholder='Username' />
+      </div>
+      <div class='password-container'>
+        <label for='password'>Password :</label>
+        <input name='password' type='password' placeholder='Password' />
+      </div>
+      <div class='email-container'>
+        <label for='email'>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+        <input name='email' type='email' placeholder='Email address' />
+      </div>
+    </div>
+    <div class='buttons-container'>
+      <input type='submit' value='Sign up' class='form-btn' onclick="signup()"/>
+      <a href="login.html">
+        <button class='form-btn'>Login instead</button>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function signup() {
+      // TODO: send user inputs to server
+      // TODO: check if they are valid, if not, show error message and don't redirect
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+
+</html>

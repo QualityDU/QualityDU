@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>QualityDU Acts</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto; /* Add horizontal scroller */
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+      color: #000;
+    }
+
+    .hyperlink-span {
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
+
+  <h2>Ostatnie aktualizacje</h2>
+
+  <table>
+    <tr>
+      <th>ELI</th>
+      <th>Tom</th>
+      <th>Nazwa ustawy</th>
+      <th>Użytkownik</th>
+      <th>Ostatnia modyfikacja</th>
+      <th>Stan</th>
+      <th>Akcje</th>
+    </tr>
+    <tr>
+      <td>DU/2024/1631</td>
+      <td>1</td>
+      <td>Obwieszczenie Marszałka Sejmu Rzeczypospolitej Polskiej z dnia 11 października 2024 r. w sprawie ogłoszenia
+        jednolitego tekstu ustawy o emeryturach i rentach z Funduszu Ubezpieczeń Społecznych </td>
+      <td>teodorPrawnik</td>
+      <td>2024-11-08 11:30:08</td>
+      <td>Oczekuje na rewizję</td>
+      <td><span class='hyperlink-span' onclick="visit_act()">Odwiedź</span></td>
+    </tr>
+    <tr>
+      <td>DU/2024/1631</td>
+      <td>1</td>
+      <td>Obwieszczenie Marszałka Sejmu Rzeczypospolitej Polskiej z dnia 11 października 2024 r. w sprawie ogłoszenia
+        jednolitego tekstu ustawy o emeryturach i rentach z Funduszu Ubezpieczeń Społecznych </td>
+      <td>teodorPrawnik</td>
+      <td>2024-11-08 11:30:08</td>
+      <td>Oczekuje na rewizję</td>
+      <td><span class='hyperlink-span' onclick="visit_act()">Odwiedź</span></td>
+    </tr>
+    <tr>
+      <td>DU/2024/1631</td>
+      <td>1</td>
+      <td>Obwieszczenie Marszałka Sejmu Rzeczypospolitej Polskiej z dnia 11 października 2024 r. w sprawie ogłoszenia
+        jednolitego tekstu ustawy o emeryturach i rentach z Funduszu Ubezpieczeń Społecznych </td>
+      <td>teodorPrawnik</td>
+      <td>2024-11-08 11:30:08</td>
+      <td>Oczekuje na rewizję</td>
+      <td><span class='hyperlink-span' onclick="visit_act()">Odwiedź</span></td>
+    </tr>
+    <tr>
+      <td>DU/2024/1631</td>
+      <td>1</td>
+      <td>Obwieszczenie Marszałka Sejmu Rzeczypospolitej Polskiej z dnia 11 października 2024 r. w sprawie ogłoszenia
+        jednolitego tekstu ustawy o emeryturach i rentach z Funduszu Ubezpieczeń Społecznych </td>
+      <td>teodorPrawnik</td>
+      <td>2024-11-08 11:30:08</td>
+      <td>Oczekuje na rewizję</td>
+      <td><span class='hyperlink-span' onclick="visit_act()">Odwiedź</span></td>
+    </tr>
+  </table>
+
+  <script>
+    function visit_act() {
+      if (window.self == window.parent) {
+        alert('You tinkered with the website, so now it won\'t work. Bye bye');
+        window.location.href = 'logged-common.html?c=chat';
+        return;
+      }
+      //TODO redirect to appropriate act
+      window.parent.location.href = 'logged-common.html?c=act-edit'; //we use parent because we should be in an object now
+    }
+  </script>
+</body>
+
+</html>
