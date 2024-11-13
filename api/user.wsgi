@@ -75,7 +75,7 @@ def user_get(user_id):
 				query = """
 					SELECT user_id, username, registration_date, last_login_date, num_contributions, karma, email_verified
 					FROM users
-					WHERE user_id = %s
+					WHERE user_id=%s;
 					"""
 				cur.execute(query, (user_id,))
 				user = cur.fetchone()
@@ -174,7 +174,7 @@ def application(environ, start_response):
 			}
 	elif environ['REQUEST_METHOD'] == 'GET':
 		try:
-			user_id = environ['PATH_INFO'].split('/')[-1]
+			user_id = environ['QUERY_STRING'].split('=')[-1]
 			user = user_get(user_id)
 			status = '200 OK'			
 			response = {
