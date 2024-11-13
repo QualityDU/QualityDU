@@ -108,8 +108,7 @@
   <div id='act-pdf-viewer-container'>
     <!--<iframe id='act-pdf-viewer' src='https://v2024.pl/D2012000155201.pdf' />-->
     <!--<object id='act-pdf-viewer' class="pdf" type="application/pdf" data="https://v2024.pl/D2012000155201.pdf"></object>-->
-    <iframe id="act-pdf-viewer" class="pdf" width="600" height="800" src="https://docs.google.com/gview?url=https://v2024.pl/D2012000155201.pdf&embedded=true"></iframe>
-
+    <!--<iframe id="act-pdf-viewer" class="pdf" width="600" height="800" src="https://docs.google.com/gview?url=https://v2024.pl/D2012000155201.pdf&embedded=true"></iframe>-->
   </div>
   <div id='act-text-viewer-container'><textarea id='act-text-editor'>Elektronicznie
   podpisany przez
@@ -306,6 +305,35 @@
         order for transcription update to succeed, you need to have the 'editor' role granted</small>
     </div>
   </div>
+
+  <script>
+    function isMobile() { // https://medium.com/geekculture/detecting-mobile-vs-desktop-browsers-in-javascript-ad46e8d23ce5
+      const regex = /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+      return regex.test(navigator.userAgent);
+    }
+
+    function createPDFViewer() {
+      let actPdfViewerContainer = document.getElementById('act-pdf-viewer-container');
+      let actPdfViewer;
+      if (isMobile()) {
+        actPdfViewer = document.createElement('iframe');
+        actPdfViewer.setAttribute('id', 'act-pdf-viewer');
+        actPdfViewer.setAttribute('class', 'pdf');
+        actPdfViewer.setAttribute('src', 'https://docs.google.com/gview?url=https://v2024.pl/D2012000155201.pdf&embedded=true');
+      } else {
+        actPdfViewer = document.createElement('object');
+        actPdfViewer.setAttribute('id', 'act-pdf-viewer');
+        actPdfViewer.setAttribute('class', 'pdf');
+        actPdfViewer.setAttribute('type', 'application/pdf');
+        actPdfViewer.setAttribute('data', 'https://v2024.pl/D2012000155201.pdf');
+      }
+      actPdfViewerContainer.appendChild(actPdfViewer);
+    }
+
+    window.onload = function () {
+      createPDFViewer();
+    }
+  </script>
 </body>
 
 </html>
