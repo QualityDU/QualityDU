@@ -25,6 +25,7 @@ def session_create(username, password):
           WHERE username = %s
         """
         cur.execute(query, (hash(sesskey), username))
+        return sesskey
   except psycopg2.Error as e:
     logging.error(f"Database error: {e}")
     raise Exception("Failed to create session due to a database error.") from e
