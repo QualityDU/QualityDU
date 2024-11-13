@@ -49,8 +49,8 @@ def application(environ, start_response):
   if environ['REQUEST_METHOD'] == 'GET':
     try:
       query = environ['QUERY_STRING']
-      username = query.split('=')[1].split('&')[0]
-      token = query.split('=')[2]
+      token = query.split('=')[1].split('&')[0]
+      username = query.split('=')[2]
       email_check(username, token)
       response = {
         "status": "success", 
