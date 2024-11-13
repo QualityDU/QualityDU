@@ -9,15 +9,20 @@ def session_create(username, password):
     with psycopg2.connect(os.getenv("DB_CONN")) as conn:
       with conn.cursor() as cur:
         query = """
-          SELECT passwd_hash
+          SELECT passwd_hash, email_verified
           FROM users
           WHERE username = %s
         """
         cur.execute(query, (username,))
-        passwd_hash = cur.fetchone()
-        if not passwd_hash:
+        row = cur.fetchone()
+        if not row:
           raise Exception("User not found.")
-        if passwd_hash[0] != hash(password):
+        passwd_hash, email_verified = row
+        if not passwd_hash:
+          raise Exception("Unexpected error: no password hash.")
+        if not email_verified:
+          raise Exception("User email not verified.")
+        if passwd_hash != hash(password):
           raise Exception("Invalid password.")
         query = """
           UPDATE users
