@@ -56,7 +56,7 @@ def user_create(username, password, email, ip_addr):
 				cur.execute(query, (passwd_hash, username, email, registration_date, ip_addr, email_verification_token))
 				# Send an email in parallel to verify the email address
 				subject = "QualityDU Email Verification"
-				body = f"Click <a href='{base_url}/api/user/verify?token={email_verification_token}&username={username}'>here</a> to verify your email address."
+				body = f"Click <a href='{base_url}/api/user/email-verify?token={email_verification_token}&username={username}'>here</a> to verify your email address."
 			  #send_email(subject, body, os.getenv("MAIL_SENDER"), [email], os.getenv("MAIL_PASSWD"))
 				threading.Thread(target=send_email, args=(subject, body, os.getenv("MAIL_SENDER"), [email], os.getenv("MAIL_PASSWD"))).start()
 
