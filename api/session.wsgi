@@ -2,8 +2,10 @@ import json
 import os
 import psycopg2
 import logging
+from dotenv import load_dotenv
 
 def session_create(username, password):
+  load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
   try:
     sesskey = os.urandom(16).hex()
     with psycopg2.connect(os.getenv("DB_CONN")) as conn:
@@ -39,6 +41,7 @@ def session_create(username, password):
     raise Exception("An unexpected error occurred during session creation.") from e
 
 def session_delete(username, session_key):
+  load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
   try:
     with psycopg2.connect(os.getenv("DB_CONN")) as conn:
       with conn.cursor() as cur:
