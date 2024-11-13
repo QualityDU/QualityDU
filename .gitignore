@@ -1,6 +1,6 @@
 # KDevelop
-.kdev/
-*.kdev
+.kdev4/
+*.kdev4
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
