@@ -35,7 +35,7 @@ def user_create(username, password, email, ip_addr):
 	passwd_hash = hash(password)
 	registration_date = datetime.now()
 
-	load_dotenv()
+	load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
 	# conn = psycopg2.connect(os.getenv("DB_CONN"))
 	# cur = conn.cursor()
 
@@ -68,7 +68,7 @@ def user_create(username, password, email, ip_addr):
 		raise Exception("An unexpected error occurred during user creation.") from e
 
 def user_get(user_id):
-	load_dotenv()
+	load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
 	try:
 		with psycopg2.connect(os.getenv("DB_CONN")) as conn:
 			with conn.cursor() as cur:
@@ -109,7 +109,7 @@ def user_update(user_id, password, email, auth_sesskey):
 	passwd_hash = hash(password)
 	chng_date = datetime.now()
 
-	load_dotenv()
+	load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
 	try:
 		with psycopg2.connect(os.getenv("DB_CONN")) as conn:
 			with conn.cursor() as cur:
@@ -128,7 +128,7 @@ def user_update(user_id, password, email, auth_sesskey):
 		raise Exception("An unexpected error occurred during user update.") from e
 
 def user_delete(user_id, auth_sesskey):
-	load_dotenv()
+	load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
 	try:
 		with psycopg2.connect(os.getenv("DB_CONN")) as conn:
 			with conn.cursor() as cur:

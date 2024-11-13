@@ -5,7 +5,7 @@ import psycopg2
 from dotenv import load_dotenv
 
 def email_check(username, token):
-  load_dotenv()
+  load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
   try:
     with psycopg2.connect(os.getenv("DB_CONN")) as conn:
       with conn.cursor() as cur:
