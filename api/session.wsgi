@@ -27,7 +27,7 @@ def session_create(username, password):
           raise Exception("Unexpected error: no password salt.")
         if not email_verified:
           raise Exception("User email not verified.")
-        if passwd_hash != bcrypt.hashpw(password.encode('utf-8'), passwd_salt.encode('utf-8')):
+        if passwd_hash.encode('utf-8') != bcrypt.hashpw(password.encode('utf-8'), passwd_salt.encode('utf-8')):
           raise Exception("Invalid password.")
         query = """
           UPDATE users
@@ -64,7 +64,7 @@ def session_delete(username, session_key):
           raise Exception("User not authenticated.")
         if not sesskey_salt:
           raise Exception("Unexpected error: no sesskey_salt.")
-        if sesskey_hash != bcrypt.hashpw(session_key.encode('utf-8'), sesskey_salt.encode('utf-8')):
+        if sesskey_hash.encode('utf-8') != bcrypt.hashpw(session_key.encode('utf-8'), sesskey_salt.encode('utf-8')):
           raise Exception("Bad session key.")
         query = """
           UPDATE users
