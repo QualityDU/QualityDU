@@ -65,9 +65,39 @@
 
   <script>
     function login() {
-      // TODO: send credentials to server
-      // TODO: save sesskey to cookie
-      window.location.href = 'logged-common.html?c=chat';
+      fetch('https://qualitydu.jpwo.v2024.pl/api/session', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json', // Sending JSON
+        },
+        body: JSON.stringify({ username: document.getElementsByName('username')[0].value, password: document.getElementsByName('password')[0].value })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Response:', data);
+        let respObj = JSON.parse(data);
+        if (respObj.status === 'success') {
+          if (respObj.session_key) {
+            // Save session_key in local storage
+            try {
+              localStorage.setItem('session_key', respObj.session_key);
+            } catch (e) {
+              alert('Failed to save session_key in local storage: ' + e);
+              return;
+            }
+            alert('You should visit QualityDU more often!');
+            window.location.href = 'logged-common.html?c=chat';
+          } else {
+            alert('Unexpected error: missing session_key in server response');
+          }
+        } else {
+          alert('Failed to login. Please check your credentials or try again');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to login for unexpected reason');
+      });
     }
   </script>
 </body>

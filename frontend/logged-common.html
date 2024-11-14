@@ -62,7 +62,7 @@
       <li><a href="logged-common.html?c=chat">Query</a></li>
       <li><a href="logged-common.html?c=acts">Acts</a></li>
       <li><a href="logged-common.html?c=about">About</a></li>
-      <li><a href="login.html">Sign out</a></li>
+      <li onclick="logout()">Sign out</li>
     </ul>
 
     <object id='plugged-component-object' type='text/html' width="600" height="400">
@@ -73,8 +73,17 @@
   <!-- SCRIPT -->
   <script type="text/javascript">
     function loginCheck() {
-      // TODO: Check if sesskey cookie is set and valid
-      // TODO: Redirect to login.html when needed
+      // check for session_key in localStorage
+      if (!localStorage.getItem('session_key')) {
+        alert('You are not logged in. Redirecting to login page');
+        window.location.href = 'login.html';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('session_key');
+      alert('You are now signed out. Redirecting to login page');
+      window.location.href = 'login.html';
     }
 
     function loadComponent() {
