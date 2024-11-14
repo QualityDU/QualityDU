@@ -36,7 +36,7 @@ CREATE TABLE public.users (
 
 def user_create(username, password, email, ip_addr):
 	passwd_salt = bcrypt.gensalt()
-	passwd_hash = bcrypt.hashpw(password, passwd_salt)
+	passwd_hash = bcrypt.hashpw(password.encode('utf-8'), passwd_salt)
 	registration_date = datetime.now()
 
 	load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
@@ -109,12 +109,12 @@ def user_sesskey_check_cur(user_id, auth_sesskey, cur):
 		raise Exception("User not authenticated.")
 	if not sesskey_salt:
 		raise Exception("Falsy sesskey_salt (should not happen)")
-	if sesskey_hash != bcrypt.hashpw(auth_sesskey, sesskey_salt):
+	if sesskey_hash != bcrypt.hashpw(auth_sesskey.encode('utf-8'), sesskey_salt):
 		raise Exception("Bad sesskey.")
 
 def user_update(user_id, password, email, auth_sesskey):
 	passwd_salt = bcrypt.gensalt()
-	passwd_hash = bcrypt.hashpw(password, passwd_salt)
+	passwd_hash = bcrypt.hashpw(password.encode('utf-8'), passwd_salt)
 	chng_date = datetime.now()
 
 	load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
