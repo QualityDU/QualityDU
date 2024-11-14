@@ -86,7 +86,7 @@
       .then(response => response.json())
       .then(data => {
         console.log('Response:', data);
-        let respObj = JSON.parse(data);
+        let respObj = data;
         if (respObj.status === 'success') {
           alert("You've signed up successfully. Verify your email and login to continue");
           window.location.href = 'login.html';

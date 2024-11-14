@@ -81,9 +81,44 @@
     }
 
     function logout() {
-      localStorage.removeItem('session_key');
-      alert('You are now signed out. Redirecting to login page');
-      window.location.href = 'login.html';
+      let username = '';
+      let session_key = '';
+      try {
+        username = localStorage.getItem('username');
+        session_key = localStorage.getItem('session_key');
+      } catch (e) {
+        alert('Failed to retrieve data from local storage: ' + e);
+        return;
+      }
+
+      fetch('https://qualitydu.jpwo.v2024.pl/api/session', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json', // Sending JSON
+        },
+        body: JSON.stringify({ username: username, session_key: session_key })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Response:', data);
+        let respObj = data;
+        if (respObj.status === 'success') {
+          try {
+            localStorage.removeItem('session_key');
+          } catch (e) {
+            alert('Failed to remove data from local storage: ' + e);
+            return;
+          }
+          alert('You are now signed out. Redirecting to login page');
+          window.location.href = 'login.html';
+        } else {
+          alert('Failed to sign out. ' + respObj.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to sign out for unexpected reason');
+      });
     }
 
     function loadComponent() {

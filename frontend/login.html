@@ -75,14 +75,15 @@
       .then(response => response.json())
       .then(data => {
         console.log('Response:', data);
-        let respObj = JSON.parse(data);
+        let respObj = data;
         if (respObj.status === 'success') {
           if (respObj.session_key) {
-            // Save session_key in local storage
+            // Save session_key & username in local storage
             try {
               localStorage.setItem('session_key', respObj.session_key);
+              localStorage.setItem('username', document.getElementsByName('username')[0].value);
             } catch (e) {
-              alert('Failed to save session_key in local storage: ' + e);
+              alert('Failed to save data to local storage: ' + e);
               return;
             }
             alert('You should visit QualityDU more often!');
