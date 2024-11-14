@@ -57,7 +57,7 @@ def user_create(username, password, email, ip_addr):
           INSERT INTO users (passwd_hash, passwd_salt, username, email, registration_date, ip_addr, email_verification_token)
           VALUES (%s, %s, %s, %s, %s, %s, %s)
           """
-				cur.execute(query, (passwd_hash, passwd_salt, username, email, registration_date, ip_addr, email_verification_token))
+				cur.execute(query, (passwd_hash, passwd_salt.decode('utf-8'), username, email, registration_date, ip_addr, email_verification_token))
 				# Send an email in parallel to verify the email address
 				subject = "QualityDU Email Verification"
 				body = f"Click <a href='{base_url}/api/email-verify?token={email_verification_token}&username={username}'>here</a> to verify your email address. <br/><hr/><br/> By proceeding, you agree to the below terms and conditions:<br><br>1. You will not use this service to post any material which is knowingly false and/or defamatory, inaccurate, abusive, vulgar, hateful, harassing, obscene, profane, sexually oriented, threatening, invasive of a person's privacy, or otherwise violative of any law.<br>2. You will not use this service to promote any illegal activities.<br>3. You will not use this service to post any copyrighted material unless the copyright is owned by you."
@@ -109,7 +109,7 @@ def user_sesskey_check_cur(user_id, auth_sesskey, cur):
 		raise Exception("User not authenticated.")
 	if not sesskey_salt:
 		raise Exception("Falsy sesskey_salt (should not happen)")
-	if sesskey_hash != bcrypt.hashpw(auth_sesskey.encode('utf-8'), sesskey_salt):
+	if sesskey_hash != bcrypt.hashpw(auth_sesskey.encode('utf-8'), sesskey_salt.encode('utf-8')):
 		raise Exception("Bad sesskey.")
 
 def user_update(user_id, password, email, auth_sesskey):
@@ -127,7 +127,7 @@ def user_update(user_id, password, email, auth_sesskey):
 					SET passwd_hash = %s, passwd_salt = %s, email = %s, last_usr_chng_date = %s
 					WHERE user_id = %s
 					"""
-				cur.execute(query, (passwd_hash, passwd_salt, email, chng_date, user_id))
+				cur.execute(query, (passwd_hash, passwd_salt.decode('utf-8'), email, chng_date, user_id))
 	except psycopg2.Error as e:
 		logging.error(f"Database error: {e}")
 		raise Exception("Failed to update user due to a database error.") from e
