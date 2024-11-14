@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import logging
 from helpers.mail import send_email
 import threading
+import bcrypt
 
 '''
 The users table is defined as:
@@ -25,6 +26,8 @@ CREATE TABLE public.users (
 	email_verification_token varchar NOT NULL,
 	sesskey_hash varchar NULL,
 	last_usr_chng_date date NULL,
+	sesskey_salt varchar NULL,
+	passwd_salt varchar NULL,
 	CONSTRAINT users_pk PRIMARY KEY (user_id),
 	CONSTRAINT users_unique UNIQUE (username),
 	CONSTRAINT users_unique_1 UNIQUE (email_verification_token)
@@ -32,7 +35,8 @@ CREATE TABLE public.users (
 '''
 
 def user_create(username, password, email, ip_addr):
-	passwd_hash = hash(password)
+	passwd_salt = bcrypt.gensalt()
+	passwd_hash = bcrypt.hashpw(password, passwd_salt)
 	registration_date = datetime.now()
 
 	load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
@@ -50,10 +54,10 @@ def user_create(username, password, email, ip_addr):
 		with psycopg2.connect(os.getenv("DB_CONN")) as conn:
 			with conn.cursor() as cur:
 				query = """
-          INSERT INTO users (passwd_hash, username, email, registration_date, ip_addr, email_verification_token)
-          VALUES (%s, %s, %s, %s, %s, %s)
+          INSERT INTO users (passwd_hash, passwd_salt, username, email, registration_date, ip_addr, email_verification_token)
+          VALUES (%s, %s, %s, %s, %s, %s, %s)
           """
-				cur.execute(query, (passwd_hash, username, email, registration_date, ip_addr, email_verification_token))
+				cur.execute(query, (passwd_hash, passwd_salt, username, email, registration_date, ip_addr, email_verification_token))
 				# Send an email in parallel to verify the email address
 				subject = "QualityDU Email Verification"
 				body = f"Click <a href='{base_url}/api/email-verify?token={email_verification_token}&username={username}'>here</a> to verify your email address. <br/><hr/><br/> By proceeding, you agree to the below terms and conditions:<br><br>1. You will not use this service to post any material which is knowingly false and/or defamatory, inaccurate, abusive, vulgar, hateful, harassing, obscene, profane, sexually oriented, threatening, invasive of a person's privacy, or otherwise violative of any law.<br>2. You will not use this service to promote any illegal activities.<br>3. You will not use this service to post any copyrighted material unless the copyright is owned by you."
@@ -92,21 +96,25 @@ def user_get(user_id):
 
 def user_sesskey_check_cur(user_id, auth_sesskey, cur):
 	query = """
-		SELECT sesskey_hash
+		SELECT sesskey_hash, sesskey_salt
 		FROM users
 		WHERE user_id = %s
 	"""
 	cur.execute(query, (user_id,))
-	sesskey_hash = cur.fetchone()
-	if not sesskey_hash:
+	row = cur.fetchone()
+	sesskey_hash, sesskey_salt = row
+	if not row:
 		raise Exception("User not found.")
-	if not sesskey_hash[0]:
+	if not sesskey_hash:
 		raise Exception("User not authenticated.")
-	if hash(sesskey_hash[0]) != hash(auth_sesskey):
+	if not sesskey_salt:
+		raise Exception("Falsy sesskey_salt (should not happen)")
+	if sesskey_hash != bcrypt.hashpw(auth_sesskey, sesskey_salt):
 		raise Exception("Bad sesskey.")
 
 def user_update(user_id, password, email, auth_sesskey):
-	passwd_hash = hash(password)
+	passwd_salt = bcrypt.gensalt()
+	passwd_hash = bcrypt.hashpw(password, passwd_salt)
 	chng_date = datetime.now()
 
 	load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
@@ -116,10 +124,10 @@ def user_update(user_id, password, email, auth_sesskey):
 				user_sesskey_check_cur(user_id, auth_sesskey, cur)
 				query = """
 					UPDATE users
-					SET passwd_hash = %s, email = %s, last_usr_chng_date = %s
+					SET passwd_hash = %s, passwd_salt = %s, email = %s, last_usr_chng_date = %s
 					WHERE user_id = %s
 					"""
-				cur.execute(query, (passwd_hash, email, chng_date, user_id))
+				cur.execute(query, (passwd_hash, passwd_salt, email, chng_date, user_id))
 	except psycopg2.Error as e:
 		logging.error(f"Database error: {e}")
 		raise Exception("Failed to update user due to a database error.") from e

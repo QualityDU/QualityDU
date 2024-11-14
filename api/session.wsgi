@@ -3,6 +3,7 @@ import os
 import psycopg2
 import logging
 from dotenv import load_dotenv
+import bcrypt
 
 def session_create(username, password):
   load_dotenv(dotenv_path='/var/www/qualitydu/api/.env')
@@ -11,7 +12,7 @@ def session_create(username, password):
     with psycopg2.connect(os.getenv("DB_CONN")) as conn:
       with conn.cursor() as cur:
         query = """
-          SELECT passwd_hash, email_verified
+          SELECT passwd_hash, passwd_salt, email_verified
           FROM users
           WHERE username = %s
         """
@@ -19,19 +20,23 @@ def session_create(username, password):
         row = cur.fetchone()
         if not row:
           raise Exception("User not found.")
-        passwd_hash, email_verified = row
+        passwd_hash, passwd_salt, email_verified = row
         if not passwd_hash:
           raise Exception("Unexpected error: no password hash.")
+        if not passwd_salt:
+          raise Exception("Unexpected error: no password salt.")
         if not email_verified:
           raise Exception("User email not verified.")
-        if passwd_hash != hash(password):
+        if passwd_hash != bcrypt.hashpw(password, passwd_salt):
           raise Exception("Invalid password.")
         query = """
           UPDATE users
-          SET sesskey_hash = %s
+          SET sesskey_hash = %s, sesskey_salt = %s
           WHERE username = %s
         """
-        cur.execute(query, (hash(sesskey), username))
+        sesskey_salt = bcrypt.gensalt()
+        sesskey_hash = bcrypt.hashpw(sesskey, sesskey_salt)
+        cur.execute(query, (sesskey_hash, sesskey_salt, username))
         return sesskey
   except psycopg2.Error as e:
     logging.error(f"Database error: {e}")
@@ -46,21 +51,24 @@ def session_delete(username, session_key):
     with psycopg2.connect(os.getenv("DB_CONN")) as conn:
       with conn.cursor() as cur:
         query = """
-          SELECT sesskey_hash
+          SELECT sesskey_hash, sesskey_salt
           FROM users
           WHERE username = %s
         """
         cur.execute(query, (username,))
-        sesskey_hash = cur.fetchone()
-        if not sesskey_hash:
+        row = cur.fetchone()
+        sesskey_hash, sesskey_salt = row
+        if not row:
           raise Exception("User not found.")
-        if not sesskey_hash[0]:
+        if not sesskey_hash:
           raise Exception("User not authenticated.")
-        if sesskey_hash[0] != hash(session_key):
+        if not sesskey_salt:
+          raise Exception("Unexpected error: no sesskey_salt.")
+        if sesskey_hash != bcrypt.hashpw(session_key, sesskey_salt):
           raise Exception("Bad session key.")
         query = """
           UPDATE users
-          SET sesskey_hash = NULL
+          SET sesskey_hash = NULL, sesskey_salt = NULL
           WHERE username = %s
         """
         cur.execute(query, (username,))
