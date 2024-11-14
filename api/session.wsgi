@@ -31,7 +31,7 @@ def session_create(username, password):
           raise Exception("Invalid password.")
         query = """
           UPDATE users
-          SET sesskey_hash = %s, sesskey_salt = %s
+          SET sesskey_hash = %s, sesskey_salt = %s, last_login_date = NOW()
           WHERE username = %s
         """
         sesskey_salt = bcrypt.gensalt()
