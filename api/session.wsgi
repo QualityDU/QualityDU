@@ -35,8 +35,8 @@ def session_create(username, password):
           WHERE username = %s
         """
         sesskey_salt = bcrypt.gensalt()
-        sesskey_hash = bcrypt.hashpw(sesskey.encode('utf-8'), sesskey_salt.encode('utf-8'))
-        cur.execute(query, (sesskey_hash, sesskey_salt, username))
+        sesskey_hash = bcrypt.hashpw(sesskey.encode('utf-8'), sesskey_salt)
+        cur.execute(query, (sesskey_hash.decode('utf-8'), sesskey_salt.decode('utf-8'), username))
         return sesskey
   except psycopg2.Error as e:
     logging.error(f"Database error: {e}")
