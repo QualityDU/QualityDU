@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 from flask_login import login_required
 from flask_socketio import emit, join_room, leave_room
 from backend import socketio
@@ -7,6 +7,11 @@ chat_bp = Blueprint(
     "chat_bp", __name__, template_folder="templates", static_folder="static"
 )
 
+
+@chat_bp.route("/")
+@login_required
+def chat():
+    return render_template("core/home.html")
 
 @socketio.on('join')
 def handle_join(data):
