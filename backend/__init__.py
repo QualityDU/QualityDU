@@ -33,10 +33,12 @@ def create_app():
     from backend.apps.core.views import core_bp
     from backend.apps.auth.views import auth_bp
     from backend.apps.chat.views import chat_bp
+    from backend.apps.act.views import act_bp
 
     app.register_blueprint(core_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(chat_bp, url_prefix="/chat")
+    app.register_blueprint(act_bp, url_prefix="/act")
 
     login_manager.login_view = "auth_bp.login"
     socketio.init_app(app, cors_allowed_origins="*")

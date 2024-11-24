@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Lista Ustaw
+{% endblock %}
+
+{% block content %}
+    <div class="container my-4">
+        <h2 class="text-center mb-4">Lista Zebranych Ustaw</h2>
+
+        <!-- Tabela ustaw -->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Tytuł ustawy</th>
+                        <th>Ekspert</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for act in acts %}
+                    <tr>
+                        <td>{{ act.id }}</td>
+                        <td>
+                            <!-- // TODO href do konkretnej acts -->
+                            <a href="/act"
+                               target="_blank"  
+                               class="text-decoration-none text-primary">
+                                {{ act.title }}
+                            </a>
+                        </td>
+                        <td>{{ act.expert }}</td>
+                        <td>{{ act.date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Edytor Ustawy
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/act/act.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.1.81/build/pdf.min.js"></script>
+    <script src="{{ url_for('static', filename='js/act/act.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid my-3">
+        <div class="row">
+            <!-- PDF Viewer -->
+            <div class="col-lg-6" id="pdf-viewer-container">
+                <h5>Podgląd PDF</h5>
+                <div id="pdf-viewer" class="border" style="height: 600px; overflow: auto;">
+                    <!-- Miejsce na wczytany PDF -->
+                </div>
+            </div>
+
+            <!-- Textarea -->
+            <div class="col-lg-6">
+                <h5>Tekst wyodrębniony z PDF</h5>
+                <textarea id="text-area" class="form-control" rows="30" style="resize: none;">
+                    Elektronicznie
+                    podpisany przez
+                    Grzegorz Paczowski
+                    Data: 2012.12.31
+                    16:25:48 +01'00'
+                    
+                    v.p
+                    l
+                    
+                    DZIENNIK USTAW
+                    RZECZYPOSPOLITEJ POLSKIEJ
+                    Warszawa, dnia 31 grudnia 2012 r.
+                    Poz. 1552
+                    
+                    rcl
+                    .go
+                    
+                    ROZPORZĄDZENIE
+                    PREZESA RADY MINISTRÓW
+                    z dnia 21 grudnia 2012 r.
+                    
+                    w sprawie przedterminowych wyborów burmistrza Raciąża w województwie mazowieckim
+                    Na podstawie art. 16 ust. 4 ustawy z dnia 5 stycznia 2011 r. – Przepisy wprowadzające ustawę – Kodeks wyborczy
+                    (Dz. U. Nr 21, poz. 113, z późn. zm.1)), art. 26 ust. 1 ustawy z dnia 16 lipca 1998 r. – Ordynacja wyborcza do rad gmin, rad
+                    powiatów i sejmików województw (Dz. U. z 2010 r. Nr 176, poz. 1190 oraz z 2011 r. Nr 34, poz. 172) oraz art. 5 ust. 2
+                    ustawy z dnia 20 czerwca 2002 r. o bezpośrednim wyborze wójta, burmistrza i prezydenta miasta (Dz. U. z 2010 r. Nr 176,
+                    poz. 1191) w związku z art. 67 ust. 4 ustawy z dnia 15 września 2000 r. o referendum lokalnym (Dz. U. Nr 88, poz. 985,
+                    z późn. zm.2)) zarządza się, co następuje:
+                    § 1. Zarządza się przeprowadzenie przedterminowych wyborów burmistrza Raciąża w województwie mazowieckim.
+                    § 2. Datę przedterminowych wyborów wyznacza się na niedzielę 24 lutego 2013 r.
+                    
+                    § 3. Dni, w których upływają terminy wykonania czynności wyborczych, określa kalendarz wyborczy, stanowiący
+                    załącznik do rozporządzenia.
+                    § 4. Rozporządzenie wchodzi w życie z dniem następującym po dniu ogłoszenia.
+                    
+                    ww
+                    w.
+                    
+                    Prezes Rady Ministrów: D. Tusk
+                    
+                    1)
+                    
+                    Zmiany wymienionej ustawy zostały ogłoszone w Dz. U. z 2011 r. Nr 102, poz. 588, Nr 147, poz. 881 i Nr 149, poz. 889 oraz z 2012 r.
+                    poz. 1399.
+                    2)
+                    Zmiany wymienionej ustawy zostały ogłoszone w Dz. U. z 2002 r. Nr 23, poz. 220, Nr 113, poz. 984 i Nr 153, poz. 1271, z 2004 r.
+                    Nr 102, poz. 1055, z 2005 r. Nr 175, poz. 1457, z 2007 r. Nr 112, poz. 766 oraz z 2011 r. Nr 21, poz. 113 i Nr 134, poz. 777.
+                    
+                    Dziennik Ustaw
+                    
+                    –2–
+                    
+                    Poz. 1552
+                    
+                    KALENDARZ WYBORCZY
+                    
+                    v.p
+                    l
+                    
+                    Załącznik do rozporządzenia Prezesa Rady Ministrów
+                    z dnia 21 grudnia 2012 r. (poz. 1552)
+                    
+                    Termin wykonania
+                    czynności wyborczej
+                    
+                    Treść czynności wyborczej
+                    
+                    1
+                    
+                    2
+                    
+                    3
+                    
+                    1
+                    
+                    w dniu wejścia w życie rozporządzenia
+                    
+                    – podanie do publicznej wiadomości, w formie obwieszczenia Wojewody, rozporządzenia Prezesa Rady Ministrów w sprawie przedterminowych wyborów burmistrza Raciąża
+                    
+                    2
+                    
+                    do 11 stycznia 2013 r.
+                    
+                    – podanie do publicznej wiadomości, w formie obwieszczenia, informacji o siedzibie miejskiej komisji wyborczej,
+                    – zawiadomienie Komisarza Wyborczego o utworzeniu komitetów
+                    wyborczych
+                    
+                    3
+                    
+                    do 14 stycznia 2013 r.
+                    
+                    4
+                    
+                    do 15 stycznia 2013 r.
+                    
+                    5
+                    
+                    do 30 stycznia 2013 r. (do godz. 2400)
+                    
+                    – zgłaszanie miejskiej komisji wyborczej do zarejestrowania kandydatów na burmistrza
+                    
+                    6
+                    
+                    do 4 lutego 2013 r.
+                    
+                    – zgłaszanie kandydatów do składu obwodowych komisji wyborczych,
+                    – podanie do publicznej wiadomości, w formie obwieszczenia, informacji o:
+                    a) numerach i granicach obwodów głosowania,
+                    b) wyznaczonych siedzibach obwodowych komisji wyborczych,
+                    – składanie przez pełnomocników komitetów wyborczych wniosków
+                    o przydział nieodpłatnego czasu antenowego w programach telewizji
+                    publicznej i publicznego radia
+                    ...
+                </textarea>
+            </div>
+        </div>
+
+        <!-- Tagi i opcje zapisu -->
+        <div class="row mt-3">
+            <div class="col-12">
+                <h5>Tagi</h5>
+                <div id="tags-container" class="d-flex flex-wrap gap-2 mb-3">
+                    <!-- Tagi będą generowane tutaj -->
+                </div>
+                <div class="d-flex">
+                    <input type="text" id="new-tag" class="form-control me-2" placeholder="Dodaj nowy tag">
+                    <button id="add-tag-button" class="btn btn-primary">Dodaj tag</button>
+                </div>
+                <button id="save-button" class="btn btn-success mt-3">Zapisz zmiany</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
