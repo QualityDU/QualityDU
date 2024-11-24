@@ -1,8 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Home | Chat{% endblock %}
 {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat/chat.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
+    <script src="{{ url_for('static', filename='js/chat/chat.js') }}"></script>
 {% endblock %}
 
 {% block content %}
-    <h1 class="text-center">Home</h1>
+    {% include 'chat/chat.html' %}
 {% endblock %}

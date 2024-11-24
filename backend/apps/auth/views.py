@@ -32,7 +32,7 @@ def register():
             db.session.commit()
             login_user(new_user)
 
-            flash('Rejestracja zakończona sukcesem! Możesz się zalogować.', category='success')
+            flash('Rejestracja zakończona sukcesem!', category='success')
             return redirect(url_for('core_bp.home'))
 
     return render_template('auth/register.html')
