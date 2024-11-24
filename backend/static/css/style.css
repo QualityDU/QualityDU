@@ -1,0 +1,8 @@
+.toast-container {
+    z-index: 1055; 
+}
+
+.toast {
+    opacity: 0.9;
+    margin-bottom: 10px;
+}
