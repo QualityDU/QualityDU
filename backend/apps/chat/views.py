@@ -18,7 +18,7 @@ def handle_join(data):
     room = data['room']
     join_room(room)
     
-    emit('message', {'sender': 'system', 'message': f'Użytkownik dołączył do pokoju {room}.'}, to=room)
+    emit('message', {'sender': 'system', 'message': f'Cześć! W czym mogę Ci pomóc?'}, to=room)
     
 
 @socketio.on('send_message')
@@ -27,5 +27,5 @@ def handle_message(data):
     message = data['message']
 
     emit('message', {'sender': 'user', 'message': message}, to=room)
-    emit('message', {'sender': 'bot', 'message': f'Odpowiedź na: {message}'}, to=room)
+    emit('message', {'sender': 'bot', 'message': f'Odpowiedź LLM'}, to=room)
     
