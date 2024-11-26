@@ -13,18 +13,16 @@
 {% block content %}
     <div class="container-fluid my-3">
         <div class="row">
-            <!-- PDF Viewer -->
             <div class="col-lg-6" id="pdf-viewer-container">
                 <h5>Podgląd PDF</h5>
                 <div id="pdf-viewer" class="border" style="height: 540px; overflow: auto;">
-                    <!-- Miejsce na wczytany PDF -->
                 </div>
             </div>
 
-            <!-- Textarea -->
             <div class="col-lg-6">
                 <h5>Tekst wyodrębniony z PDF</h5>
                 <textarea id="text-area" class="form-control" rows="22" style="resize: none;">
+                    <!-- TODO zmienic na odczyt odpowiedniego actu z jinja variable-->
                     DZIENNIK USTAW RZECZYPOSPOLITEJ POLSKIEJ
                     Warszawa, dnia 31 grudnia 2012 r.
                     Poz. 1552
@@ -65,13 +63,12 @@
             </div>
         </div>
 
-        <!-- Tagi i opcje zapisu -->
         <div class="row mt-3">
             <div class="col-12">
                 <h5>Tagi</h5>
                 <div id="tags-container" class="d-flex flex-wrap gap-2 mb-3">
-                    <!-- Tagi będą generowane tutaj -->
                 </div>
+                <!-- TODO powinno byc tylko dla admina i eksperta-->
                 <div class="d-flex">
                     <input type="text" id="new-tag" class="form-control me-2" placeholder="Dodaj nowy tag">
                     <button id="add-tag-button" class="btn btn-primary">Dodaj tag</button>

@@ -5,10 +5,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const addTagButton = document.getElementById("add-tag-button");
     const saveButton = document.getElementById("save-button");
 
-    const tags = ["Prawo", "Ekonomia"]; // Przykładowe tagi
-    const pdfUrl = "/static/pdf/sample.pdf"; // Ścieżka do PDF (do zmiany)
+    const tags = ["Prawo", "Ekonomia"]; // TODO: wyswietlac pobrane tagi z serwera z jinja variable
+    const pdfUrl = "/static/pdf/sample.pdf"; // TODO: scieżka do odpowiedniego PDF z serwera 
 
-    // 1. Ładowanie PDF w div #pdf-viewer
     const pdfjsLib = window['pdfjs-dist/build/pdf'];
     pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@3.1.81/build/pdf.worker.min.js`;
 
@@ -31,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadPdf(pdfUrl);
 
-    // 2. Wyświetlanie tagów
     const renderTags = () => {
         tagsContainer.innerHTML = "";
         tags.forEach((tag, index) => {
@@ -50,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 3. Dodawanie nowego tagu
     addTagButton.addEventListener("click", () => {
         const newTag = newTagInput.value.trim();
         if (newTag && !tags.includes(newTag)) {
@@ -60,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 4. Obsługa zapisu
     saveButton.addEventListener("click", () => {
         const updatedText = textArea.value;
         console.log("Zapisano zmiany:");

@@ -1,20 +1,23 @@
 from flask import Blueprint, jsonify, render_template, request, flash
 from flask_login import login_required
 
+# TODO: pamietac o zabezpieczeniu zeby odczyt byl dla uzytownika z odpowiednimi uprawnieniami, a zapisa tylko dla admina i eksperta
+
 act_bp = Blueprint(
     "act_bp", __name__, template_folder="templates", static_folder="static"
 )
 
 
-@act_bp.route("/")  # TODO: pozniej dodac parametr
+@act_bp.route("/")  # TODO: pozniej dodac parametr i na podstawie niego wybrac z bazy danych akt
 @login_required
 def act():
-    return render_template("act/act.html")
+    return render_template("act/act.html") # TODO: przekazac dane z bazy danych jako jinja variables
 
 
-@act_bp.route('/save', methods=['POST']) # TODO: pozniej dodac parametr
+@act_bp.route('/save', methods=['POST']) # TODO: pozniej dodac parametr i na podstawie niego wybrac z bazy danych akt
 def save():
     if request.method == 'POST':
+
         data = request.json
         text = data.get('text')
         tags = data.get('tags')
@@ -26,7 +29,7 @@ def save():
 
     return render_template('act/act.html')
 
-@act_bp.route('/all', methods=['GET'])
+@act_bp.route('/all', methods=['GET']) # TODO: dodac parametr dot. paginacji
 def all_acts():
     ACTS = [
         {

@@ -8,11 +8,11 @@
     <div class="container my-4">
         <h2 class="text-center mb-4">Lista Zebranych Ustaw</h2>
 
-        <!-- Tabela ustaw -->
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead class="table-primary">
                     <tr>
+                        <!-- TODO sprawdzic czy pola zgadzaja sie z modelem actu, wyswietlamy tylko najwazniejse info-->
                         <th>#</th>
                         <th>Tytuł ustawy</th>
                         <th>Ekspert</th>
@@ -21,10 +21,10 @@
                 </thead>
                 <tbody>
                     {% for act in acts %}
+                    <!-- TODO sprawdzic czy pola zgadzaja sie z modelem actu, wyswietlamy tylko najwazniejse info-->
                     <tr>
                         <td>{{ act.id }}</td>
                         <td>
-                            <!-- // TODO href do konkretnej acts -->
                             <a href="/act"
                                target="_blank"  
                                class="text-decoration-none text-primary">

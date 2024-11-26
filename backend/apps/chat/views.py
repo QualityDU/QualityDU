@@ -3,6 +3,8 @@ from flask_login import login_required
 from flask_socketio import emit, join_room, leave_room
 from backend import socketio
 
+# TODO: dodac endpoint do wysylania wiadomosci do bota
+
 chat_bp = Blueprint(
     "chat_bp", __name__, template_folder="templates", static_folder="static"
 )
@@ -27,5 +29,5 @@ def handle_message(data):
     message = data['message']
 
     emit('message', {'sender': 'user', 'message': message}, to=room)
-    emit('message', {'sender': 'bot', 'message': f'Odpowiedź LLM'}, to=room)
+    emit('message', {'sender': 'bot', 'message': f'Odpowiedź LLM'}, to=room) # TODO: zaimplementować logikę LLM w odpowiedziach
     
