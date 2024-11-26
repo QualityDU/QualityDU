@@ -5,7 +5,6 @@ load_dotenv()
 
 
 class Config:
-    FLASK_APP = "app.py"
     STATIC_FOLDER = "static"
     TEMPLATES_FOLDER = "templates"
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
@@ -21,3 +20,9 @@ class ProdConfig(Config):
     FLAKS_ENV = "production"
     TESTING = False
     DEBUG = False
+    
+class TestConfig(Config):
+    FLASK_ENV = "testing"
+    DEBUG = False
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get("TEST_DATABASE_URL")

@@ -5,6 +5,9 @@ from flask_bcrypt import Bcrypt
 from backend.models import db
 from flask_migrate import Migrate
 from flask_socketio import SocketIO
+from backend.config import DevConfig, ProdConfig, TestConfig
+from dotenv import load_dotenv
+import os
 
 login_manager = LoginManager()
 bcrypt = Bcrypt()
@@ -14,7 +17,14 @@ socketio = SocketIO()
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object("backend.config.DevConfig")
+
+    flask_env = os.getenv("FLASK_ENV", "development").lower()
+    if flask_env == "production":
+        app.config.from_object(ProdConfig)
+    elif flask_env == "testing":
+        app.config.from_object(TestConfig)
+    else:
+        app.config.from_object(DevConfig)
 
     db.init_app(app)
     login_manager.init_app(app)
