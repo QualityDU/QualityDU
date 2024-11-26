@@ -1,4 +1,0 @@
-DB_CONN="dbname=qualitydu user=<db_user> password=<secret>"
-MAIL_SENDER="<email address>"
-MAIL_PASSWD="<email passwd>"
-BASE_URL="https://qualitydu.<domainname>"

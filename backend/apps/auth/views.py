@@ -7,7 +7,7 @@ auth_bp = Blueprint(
     "auth_bp", __name__, template_folder="templates", static_folder="static"
 )
 
-@auth_bp.route('/register', methods=['GET', 'POST'])
+@auth_bp.route('/api/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
