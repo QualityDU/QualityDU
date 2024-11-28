@@ -2,7 +2,7 @@ import datetime
 
 from flask import Blueprint, jsonify, render_template, request, flash
 from flask_login import login_required
-from models import Act, Tag, ActTag, db
+from backend.models import Act, Tag, ActTag, db
 
 
 # TODO: pamietac o zabezpieczeniu zeby odczyt byl dla uzytownika z odpowiednimi uprawnieniami, a zapisa tylko dla admina i eksperta
@@ -45,11 +45,11 @@ def save():
 
             for tag_name in tags:
                 tag = Tag.query.filter_by(name=tag_name).first()
-                '''if not tag: # TODO: Create new tag???
-                    tag = Tag(name=tag_name, num_assigned=0, date_created=date.today())
+                if not tag:
+                    tag = Tag(name=tag_name, num_assigned=0, date_created=datetime.today())
                     db.session.add(tag)
                     db.session.flush()
-                '''
+
                 tag.num_assigned += 1
 
                 act_tag = ActTag(act_id=act_id, tag_id=tag.tag_id, assigned_date=datetime.today())
