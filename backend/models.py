@@ -9,7 +9,7 @@ db = SQLAlchemy()
 class UserRole(enum.Enum):
     admin = 1
     user = 2
-    export = 3
+    expert = 3
 
 
 class User(db.Model, UserMixin):

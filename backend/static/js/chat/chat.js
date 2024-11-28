@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
         messageInput.value = ""; 
     });
 
-    // Przeniesiony 'keypress'
     messageInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();

@@ -1,12 +1,9 @@
-import datetime
-
+from datetime import datetime
 from flask import Blueprint, jsonify, render_template, request, flash
-from flask_login import login_required
+from flask_login import login_required, current_user
 from backend.models import Act, Tag, ActTag, db
-from math import ceil
+from flask_sqlalchemy import pagination
 
-
-# TODO: pamietac o zabezpieczeniu zeby odczyt byl dla uzytownika z odpowiednimi uprawnieniami, a zapisa tylko dla admina i eksperta
 
 act_bp = Blueprint(
     "act_bp", __name__, template_folder="templates", static_folder="static"
@@ -17,25 +14,32 @@ act_bp = Blueprint(
 @login_required
 def act(act_id):
     act = Act.query.filter_by(act_id=act_id).first_or_404()
-    return render_template("act/act.html", act=act)
+    tags = Tag.query.join(ActTag).filter(ActTag.act_id == act_id).all()
+    act_tags = [tag.name for tag in tags]
+    
+    return render_template("act/act.html", act=act, act_tags=act_tags)
 
 
 @act_bp.route('/save', methods=['POST'])
+@login_required
 def save():
     if request.method == 'POST':
-        act_id = request.args.get('id')
+        if current_user.role != 'admin' and current_user.role != 'expert':
+            return jsonify({"status": "error", "message": "Nie masz uprawnień do zapisywania zmian."}), 403
 
         data = request.json
+        act_id = data.get('act_id')
         text = data.get('text')
         tags = data.get('tags')
 
+        print(act_id)
         act = Act.query.filter_by(act_id=act_id).first()
         if not act:
             return jsonify({"status": "error", "message": "Cannot find act with given ID"}), 404
 
         if text:
             act.text_payload = text
-            act.last_edited_date = datetime.utcnow()
+            act.last_edited_date = datetime.today()
 
         if tags:
             ActTag.query.filter_by(act_id=act_id).delete()
@@ -60,33 +64,15 @@ def save():
     return render_template('act/act.html')
 
 @act_bp.route('/all', methods=['GET'])
+@login_required
 def all_acts():
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
+    page = request.args.get("page", 1, type=int)
+    per_page = 15
 
-    total_acts = Act.query.count()
-    acts = Act.query.order_by(Act.date_scraped.desc()).paginate(page=page, per_page=per_page)
+    pagination = Act.query.order_by(Act.act_id).paginate(page=page, per_page=per_page, error_out=False)
 
-    acts_data = [
-        {
-            "id": act.act_id,
-            "title": act.du_code,
-            "expert": act.tags[0].creator.username if act.tags else "Brak eksperta",
-            "date": act.date_scraped.strftime('%Y-%m-%d %H:%M:%S'),
-            "link": f"/act/{act.act_id}"
-        }
-        for act in acts.items
-    ]
-
-    pagination_info = {
-        "current_page": page,
-        "per_page": per_page,
-        "total_pages": ceil(total_acts / per_page),
-        "total_acts": total_acts,
-        "has_prev": acts.has_prev,
-        "has_next": acts.has_next,
-        "prev_page": page - 1 if acts.has_prev else None,
-        "next_page": page + 1 if acts.has_next else None
-    }
-
-    return render_template('act/acts-table.html', acts=acts_data, pagination=pagination_info)
+    return render_template(
+        'act/acts-table.html',
+        acts=pagination.items,
+        pagination=pagination   
+    )

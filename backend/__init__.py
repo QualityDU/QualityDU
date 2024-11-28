@@ -7,6 +7,7 @@ from flask_migrate import Migrate
 from flask_socketio import SocketIO
 from backend.config import DevConfig, ProdConfig, TestConfig
 from dotenv import load_dotenv
+from flask_cors import CORS
 import os
 
 login_manager = LoginManager()
@@ -30,6 +31,8 @@ def create_app():
     login_manager.init_app(app)
     bcrypt.init_app(app)
     migrate.init_app(app, db)
+    CORS(app)
+    CORS(app, resources={r"*": {"origins": "*"}})
 
     from backend.models import User
 
