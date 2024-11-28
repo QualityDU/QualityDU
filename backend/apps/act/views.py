@@ -1,6 +1,9 @@
+import datetime
+
 from flask import Blueprint, jsonify, render_template, request, flash
 from flask_login import login_required
-from models import Act
+from models import Act, Tag, ActTag, db
+
 
 # TODO: pamietac o zabezpieczeniu zeby odczyt byl dla uzytownika z odpowiednimi uprawnieniami, a zapisa tylko dla admina i eksperta
 
@@ -20,15 +23,39 @@ def act():
     return render_template("act/act.html", acts=acts)
 
 
-@act_bp.route('/save', methods=['POST']) # TODO: pozniej dodac parametr i na podstawie niego wybrac z bazy danych akt
+@act_bp.route('/save', methods=['POST'])
 def save():
     if request.method == 'POST':
+        act_id = request.args.get('id')
 
         data = request.json
         text = data.get('text')
         tags = data.get('tags')
 
-        # TODO: Zapis zmian w bazie danych
+        act = Act.query.filter_by(act_id=act_id).first()
+        if not act:
+            return jsonify({"status": "error", "message": "Cannot find act with given ID"}), 404
+
+        if text:
+            act.text_payload = text
+            act.last_edited_date = datetime.utcnow()
+
+        if tags:
+            ActTag.query.filter_by(act_id=act_id).delete()
+
+            for tag_name in tags:
+                tag = Tag.query.filter_by(name=tag_name).first()
+                '''if not tag: # TODO: Create new tag???
+                    tag = Tag(name=tag_name, num_assigned=0, date_created=date.today())
+                    db.session.add(tag)
+                    db.session.flush()
+                '''
+                tag.num_assigned += 1
+
+                act_tag = ActTag(act_id=act_id, tag_id=tag.tag_id, assigned_date=datetime.today())
+                db.session.add(act_tag)
+
+        db.session.commit()
 
         flash('Zapisano zmiany.', category='success')
         return jsonify({"status": "success", "message": "Zapisano zmiany.", "text": text, "tags": tags}), 200
