@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request, flash
 from flask_login import login_required
+from models import Act
 
 # TODO: pamietac o zabezpieczeniu zeby odczyt byl dla uzytownika z odpowiednimi uprawnieniami, a zapisa tylko dla admina i eksperta
 
@@ -8,10 +9,15 @@ act_bp = Blueprint(
 )
 
 
-@act_bp.route("/")  # TODO: pozniej dodac parametr i na podstawie niego wybrac z bazy danych akt
+@act_bp.route("/")
 @login_required
 def act():
-    return render_template("act/act.html") # TODO: przekazac dane z bazy danych jako jinja variables
+    act_id = request.args.get('id')
+    if act_id:
+        acts = Act.query.filter_by(act_id=act_id).all()
+    else:
+        acts = Act.query.all() # TODO: Add pegination???
+    return render_template("act/act.html", acts=acts)
 
 
 @act_bp.route('/save', methods=['POST']) # TODO: pozniej dodac parametr i na podstawie niego wybrac z bazy danych akt
