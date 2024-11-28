@@ -24,7 +24,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         socket.emit('send_message', { room: 'general', message });
         messageInput.value = ""; 
+    });
 
+    // Przeniesiony 'keypress'
     messageInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();
