@@ -22,7 +22,7 @@ def check_logged_in(context):
 	wait.until(lambda d : d.current_url != "http://localhost:5000/auth/login")
 	assert context.browser.current_url == "http://localhost:5000/"
 
-@given('I enter existing username and incorrect password')
+@given('I enter incorrect credentials')
 def enter_incorrect_creds(context):
 	context.browser.find_element(By.NAME, "username").send_keys(context.randomly_generated_user * 2)
 	context.browser.find_element(By.NAME, "password").send_keys(context.randomly_generated_user * 2)
@@ -30,5 +30,8 @@ def enter_incorrect_creds(context):
 @then('I am not logged in')
 def check_not_logged_in(context):
 	wait = WebDriverWait(context.browser, timeout=2)
-	wait.until(lambda d : d.current_url != "http://localhost:5000/auth/login")
+	try:
+		wait.until(lambda d : d.current_url != "http://localhost:5000/auth/login")
+	except:
+		assert True
 	assert context.browser.current_url == "http://localhost:5000/auth/login"
